@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Đường về nhà từ trường</title>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+        <style>
+            #map{
+                height: 100%;
+            }
+            html, body{
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+        </style>
+        <script>
+            function initMap(){
+                const truong = { lat: 10.846067, lng: 106.794567 };
+                const nha = { lat: 10.837667261777575, lng: 106.79138012863208 };
+                const map = new google.maps.Map(document.getElementById("map"), {
+                    zoom: 15,
+                    center: truong,
+                });
+                
+                const truongMarker = new google.maps.Marker({
+                    title: "truong",
+                    position : truong,
+                    map: map,
+                    icon: "UTC2.png",
+                });
+                const nhaMarker = new google.maps.Marker({
+                    title: 'nha',
+                    position : nha,
+                    map: map, 
+                    icon: "P.png",
+                });
+                const thongTinTruong = "Địa chỉ: 450-451 Lê Văn Việt, Phường Tăng Nhơn Phú A, Tp. Thủ Đức, TP. Hồ Chí Minh";
+                const thongTinNha = "Họ Tên: Đặng Bình Phước<br>Tuổi: 21<br>MSSV: 5951071079<br>Ngày sinh: 08/11/2000<br>Quê quán: Thái Bình<br>Email: 5951071079@st.utc2.edu.vn";
+
+                const thongTinTruongMarker = new google.maps.InfoWindow({
+                    content : thongTinTruong
+                });
+
+                const thongTinNhaMarker = new google.maps.InfoWindow({
+                    content : thongTinNha
+                });
+
+                truongMarker.addListener("click", ()=>{
+                    thongTinTruongMarker.open(map, truongMarker);
+                });
+
+                nhaMarker.addListener("click", ()=>{
+                    thongTinNhaMarker.open(map, nhaMarker);
+                });
+                const directionsService = new google.maps.DirectionsService();
+                const directionsRenderer = new google.maps.DirectionsRenderer();
+                
+                directionsRenderer.setMap(map);
+                directionsService.route(
+                {
+                    origin: nha,
+                    destination: truong,
+                    travelMode: google.maps.TravelMode.WALKING,
+                },
+                (response, status) => {
+                    if(status == 'OK')
+                        directionsRenderer.setDirections(response);
+                    else
+                        window.alert("Directions request failed due to " + status);
+                }
+            );
+            }
+        </script>
+    </head>
+    <body>
+        <div id="map"></div>
+        <script
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBIwzALxUPNbatRBj3Xi1Uhp0fFzwWNBkE&callback=initMap&libraries=&v=weekly"
+            async
+        ></script>
+    </body>
+</html>
